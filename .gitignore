@@ -1,25 +1,5 @@
 ```
-# Dependencies
-target/
-
-# Logs and temp files
-*.log
-*.tmp
-
-# Environment
-.env
-.env.local
-.env.*
-
-# Editors
-.vscode/
-.idea/
-
-# OS-specific
-.DS_Store
-Thumbs.db
-
-# Build artifacts
+# Compiled and build artifacts
 *.o
 *.obj
 *.exe
@@ -28,7 +8,30 @@ Thumbs.db
 *.a
 *.out
 
-# Python
+# Dependencies
+target/
+**/target/
+
+# Logs and temp files
+*.log
+*.tmp
+*.swp
+
+# Editors
+.vscode/
+.idea/
+
+# Environment
+.env
+.env.local
+*.env.*
+
+# Coverage
+coverage/
+htmlcov/
+.coverage
+
+# Python specific
 __pycache__/
 *.pyc
 *.pyo
@@ -40,84 +43,32 @@ venv/
 pip-log.txt
 pip-delete-this-directory.txt
 .tox/
-.coverage
 .coverage.*
 .cache
 nosetests.xml
 coverage.xml
 *.cover
 *.log
-.git/modules/
-*.sublime-workspace
-.pytest_cache/
-.mypy_cache/
-.hypothesis/
+.DS_Store
+Thumbs.db
 
-# Node.js
-node_modules/
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-lerna-debug.log*
-
-# Rust
+# Rust specific
 Cargo.lock
-target/
+*.rs.bk
+**/foo
 
-# Java
-*.class
-*.jar
-*.war
-*.ear
-*.nar
-*.so
-*.dll
-*.dylib
-*.jnilib
-target/
+# MyPy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pytest
+.pytest_cache/
+
+# Gradle
 .gradle/
-build/
 
-# Go
-*.exe
-*.exe~
-*.dll
-*.so
-*.dylib
-*.test
-*.prof
-
-# C/C++
-*.o
-*.obj
-*.a
-*.lib
-*.la
-*.lo
-*.so
-*.so.*
-*.dll
-*.dylib
-*.dSYM
-*.gem
-
-# Ruby
-*.gem
-*.rbc
-*.sass-cache
-capybara-*.html
-.rspec
-/log
-/tmp
-/db/*.sqlite3
-/db/*.sqlite3-journal
-/public/system
-/vendor/bundle
-.bundle
-.rbx
-.config
-
-# Compression
+# Compressed files
 *.zip
 *.gz
 *.tar
@@ -140,8 +91,4 @@ capybara-*.html
 *.tar.bz2
 *.tar.xz
 *.tar.zst
-
-# Coverage
-coverage/
-htmlcov/
 ```
