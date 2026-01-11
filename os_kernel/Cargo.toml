@@ -8,6 +8,10 @@ edition = "2021"
 [dependencies]
 uefi = { version = "0.20", features = ["alloc", "logger"] }
 uefi-services = "0.16"
+log = "0.4"
+spin = "0.9"
+num-traits = "0.2"
+num-derive = "0.3"
 
 [profile.dev]
 panic = "abort"
