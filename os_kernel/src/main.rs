@@ -17,13 +17,13 @@ fn main(_handle: Handle, mut system_table: SystemTable<Boot>) -> Status {
     uefi_services::init(&mut system_table).expect_success("Failed to initialize UEFI services");
 
     // Выводим приветствие
-    let _ = system_table.stdout().output_string(ucstr16!("Welcome to our custom OS (Vibe Code Edition)!"));
-    let _ = system_table.stdout().output_string(ucstr16!("\r\n"));
-    let _ = system_table.stdout().output_string(ucstr16!("Type 'help' for available commands\r\n"));
+    let _ = system_table.stdout().output_string(cstr16!("Welcome to our custom OS (Vibe Code Edition)!"));
+    let _ = system_table.stdout().output_string(cstr16!("\r\n"));
+    let _ = system_table.stdout().output_string(cstr16!("Type 'help' for available commands\r\n"));
 
     // Главный цикл обработки команд
     loop {
-        let _ = system_table.stdout().output_string(ucstr16!("> "));
+        let _ = system_table.stdout().output_string(cstr16!("> "));
         
         let command = read_line(&mut system_table);
         
@@ -46,19 +46,19 @@ fn main(_handle: Handle, mut system_table: SystemTable<Boot>) -> Status {
             "clear" => {
                 // Очистка экрана (ограниченно поддерживается в UEFI)
                 for _ in 0..50 {
-                    let _ = system_table.stdout().output_string(ucstr16!("\r\n"));
+                    let _ = system_table.stdout().output_string(cstr16!("\r\n"));
                 }
             },
             "exit" | "quit" => {
-                let _ = system_table.stdout().output_string(ucstr16!("Goodbye!\r\n"));
+                let _ = system_table.stdout().output_string(cstr16!("Goodbye!\r\n"));
                 break;
             },
             "" => continue, // Пустая команда, продолжаем
             _ => {
-                let _ = system_table.stdout().output_string(ucstr16!("Unknown command: "));
-                let _ = system_table.stdout().output_string(ucstr16!(command.as_str()));
-                let _ = system_table.stdout().output_string(ucstr16!("\r\n"));
-                let _ = system_table.stdout().output_string(ucstr16!("Type 'help' for available commands\r\n"));
+                let _ = system_table.stdout().output_string(cstr16!("Unknown command: "));
+                let _ = system_table.stdout().output_string(cstr16!(command.as_str()));
+                let _ = system_table.stdout().output_string(cstr16!("\r\n"));
+                let _ = system_table.stdout().output_string(cstr16!("Type 'help' for available commands\r\n"));
             }
         }
     }
@@ -78,7 +78,7 @@ fn read_line(system_table: &mut SystemTable<Boot>) -> String {
                     Key::Printable(ch) => {
                         // Выводим символ
                         let ch_str = format!("{}", ch);
-                        let _ = system_table.stdout().output_string(ucstr16!(ch_str.as_str()));
+                        let _ = system_table.stdout().output_string(cstr16!(ch_str.as_str()));
                         
                         // Добавляем в буфер ввода
                         input.push(ch);
@@ -87,11 +87,11 @@ fn read_line(system_table: &mut SystemTable<Boot>) -> String {
                         if !input.is_empty() {
                             input.pop();
                             // Визуальное удаление символа
-                            let _ = system_table.stdout().output_string(ucstr16!("\x08 \x08"));
+                            let _ = system_table.stdout().output_string(cstr16!("\x08 \x08"));
                         }
                     },
                     Key::Special(13) => { // Enter
-                        let _ = system_table.stdout().output_string(ucstr16!("\r\n"));
+                        let _ = system_table.stdout().output_string(cstr16!("\r\n"));
                         break;
                     },
                     _ => {} // Игнорируем другие клавиши
@@ -106,14 +106,14 @@ fn read_line(system_table: &mut SystemTable<Boot>) -> String {
 
 // Функция вывода справки
 fn print_help(stdout: &mut uefi::proto::console::text::Output) {
-    let _ = stdout.output_string(ucstr16!("Available commands:\r\n"));
-    let _ = stdout.output_string(ucstr16!("  help         - Show this help message\r\n"));
-    let _ = stdout.output_string(ucstr16!("  restart      - Restart the system\r\n"));
-    let _ = stdout.output_string(ucstr16!("  mandelbrot   - Draw Mandelbrot fractal\r\n"));
-    let _ = stdout.output_string(ucstr16!("  calculator   - Simple calculator\r\n"));
-    let _ = stdout.output_string(ucstr16!("  timedatectl  - Show system time and date\r\n"));
-    let _ = stdout.output_string(ucstr16!("  clear        - Clear the screen\r\n"));
-    let _ = stdout.output_string(ucstr16!("  exit/quit    - Exit the OS\r\n"));
+    let _ = stdout.output_string(cstr16!("Available commands:\r\n"));
+    let _ = stdout.output_string(cstr16!("  help         - Show this help message\r\n"));
+    let _ = stdout.output_string(cstr16!("  restart      - Restart the system\r\n"));
+    let _ = stdout.output_string(cstr16!("  mandelbrot   - Draw Mandelbrot fractal\r\n"));
+    let _ = stdout.output_string(cstr16!("  calculator   - Simple calculator\r\n"));
+    let _ = stdout.output_string(cstr16!("  timedatectl  - Show system time and date\r\n"));
+    let _ = stdout.output_string(cstr16!("  clear        - Clear the screen\r\n"));
+    let _ = stdout.output_string(cstr16!("  exit/quit    - Exit the OS\r\n"));
 }
 
 // Функция перезагрузки системы
@@ -131,7 +131,7 @@ fn restart_system(system_table: &mut SystemTable<Boot>) -> ! {
 
 // Функция отрисовки фрактала Мандельброта
 fn draw_mandelbrot(stdout: &mut uefi::proto::console::text::Output) {
-    let _ = stdout.output_string(ucstr16!("Drawing Mandelbrot fractal...\r\n"));
+    let _ = stdout.output_string(cstr16!("Drawing Mandelbrot fractal...\r\n"));
     
     // Простое текстовое представление множества Мандельброта
     let width = 60;
@@ -156,29 +156,29 @@ fn draw_mandelbrot(stdout: &mut uefi::proto::console::text::Output) {
             
             let ch = if iter == max_iter { '#' } else if iter > 30 { '*' } else if iter > 15 { '+' } else if iter > 5 { '.' } else { ' ' };
             let ch_str = format!("{}", ch);
-            let _ = stdout.output_string(ucstr16!(ch_str.as_str()));
+            let _ = stdout.output_string(cstr16!(ch_str.as_str()));
         }
-        let _ = stdout.output_string(ucstr16!("\r\n"));
+        let _ = stdout.output_string(cstr16!("\r\n"));
     }
 }
 
 // Функция простого калькулятора
 fn run_calculator(stdout: &mut uefi::proto::console::text::Output) {
-    let _ = stdout.output_string(ucstr16!("Simple Calculator (type 'exit' to quit)\r\n"));
-    let _ = stdout.output_string(ucstr16!("Enter expressions like: 5 + 3, 10 - 2, etc.\r\n"));
+    let _ = stdout.output_string(cstr16!("Simple Calculator (type 'exit' to quit)\r\n"));
+    let _ = stdout.output_string(cstr16!("Enter expressions like: 5 + 3, 10 - 2, etc.\r\n"));
     
     // Для простоты, симулируем вычисления
-    let _ = stdout.output_string(ucstr16!("Example calculations:\r\n"));
-    let _ = stdout.output_string(ucstr16!("2 + 2 = 4\r\n"));
-    let _ = stdout.output_string(ucstr16!("5 * 6 = 30\r\n"));
-    let _ = stdout.output_string(ucstr16!("10 - 3 = 7\r\n"));
-    let _ = stdout.output_string(ucstr16!("Calculator simulation complete.\r\n"));
+    let _ = stdout.output_string(cstr16!("Example calculations:\r\n"));
+    let _ = stdout.output_string(cstr16!("2 + 2 = 4\r\n"));
+    let _ = stdout.output_string(cstr16!("5 * 6 = 30\r\n"));
+    let _ = stdout.output_string(cstr16!("10 - 3 = 7\r\n"));
+    let _ = stdout.output_string(cstr16!("Calculator simulation complete.\r\n"));
 }
 
 // Функция отображения даты и времени
 fn show_time_date(stdout: &mut uefi::proto::console::text::Output) {
     // В реальной реализации мы бы получали время из сервисов UEFI runtime
-    let _ = stdout.output_string(ucstr16!("Current date and time: [UEFI Runtime Services Needed]\r\n"));
-    let _ = stdout.output_string(ucstr16!("System uptime: [Not implemented]\r\n"));
-    let _ = stdout.output_string(ucstr16!("Time and date display simulated.\r\n"));
+    let _ = stdout.output_string(cstr16!("Current date and time: [UEFI Runtime Services Needed]\r\n"));
+    let _ = stdout.output_string(cstr16!("System uptime: [Not implemented]\r\n"));
+    let _ = stdout.output_string(cstr16!("Time and date display simulated.\r\n"));
 }
